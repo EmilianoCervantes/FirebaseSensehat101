@@ -7,13 +7,13 @@ import datetime
 
 sense = SenseHat()
 
-firebase = firebase.FirebaseApplication("https://estacionmeteorologicaverano.firebaseio.com", None)
-file = open('data.txt', 'w')
-time.sleep(13)
+#firebase = firebase.FirebaseApplication("https://estacionmeteorologicaverano.firebaseio.com", None)
+file = open('data' + str(datetime.datetime.now().isoformat()) + '.txt', 'w')
+time.sleep(10)
 sense.clear(0, 240, 21)
 time.sleep(2)
 sense.clear(0, 0, 0)
-for i in range(1020):
+for i in range(600):
 	temp = round(sense.get_temperature(), 1)
 	hum = round(sense.get_humidity(), 1)
 	pres = round(sense.get_pressure(), 1)
@@ -31,11 +31,7 @@ for i in range(1020):
 			'gyroscope':gyro,
 			'time': datetime.datetime.now().isoformat()
 			}
-	try:
-		firebase.post('/registros-v3', data)
-	except:
-		file.write(str(data) + ',\n')
-	
+	file.write(str(data) + ',\n')
 	time.sleep(1)
 sense.clear(255, 0, 0)
 file.close()
